@@ -217,3 +217,7 @@ alias 11.4='rdesktop 192.168.11.4 -u sameet -d PALYAM -g "90%"'
 alias 4.4='rdesktop 192.168.4.4 -u sameet -d PALYAM -g "90%"'
 
 export HISTTIMEFORMAT="%d/%m/%y %T - "
+
+# vim alias
+alias vundleinstall='vim +PluginInstall +qall'
+

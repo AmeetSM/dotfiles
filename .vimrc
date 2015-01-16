@@ -1,5 +1,41 @@
+" ================== Custom VIMRC ================================
+
 set nocompatible              " be iMproved, required
 filetype off                  " required
+
+
+et nocompatible
+" set nowrap        " don't wrap lines
+set tabstop=4     " a tab is four spaces
+set expandtab
+set backspace=indent,eol,start
+                  " allow backspacing over everything in insert mode
+set autoindent    " always set autoindenting on
+set copyindent    " copy the previous indentation on autoindenting
+set number        " always show line numbers
+set shiftwidth=4  " number of spaces to use for autoindenting
+set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
+set showmatch     " set show matching parenthesis
+set ignorecase    " ignore case when searching
+set smartcase     " ignore case if search pattern is all lowercase,
+                  "    case-sensitive otherwise
+set smarttab      " insert tabs on the start of a line according to
+                  "    shiftwidth, not tabstop
+set hlsearch      " highlight search terms
+set ruler         " show row and col number
+
+set incsearch     " show search matches as you type
+set history=1000         " remember more commands and search history
+set undolevels=1000      " use many muchos levels of undo
+set wildignore=*.swp,*.bak,*.pyc,*.class
+set title                " change the terminal's title
+set visualbell           " don't beep
+set noerrorbells         " don't beep
+set nobackup
+set noswapfile
+filetype plugin on
+syntax on
+
 
 " set the runtime path to include Vundle and initialize
 "
@@ -35,7 +71,16 @@ Plugin 'ujihisa/unite-colorscheme'
 Plugin 'bling/vim-airline'
 Plugin 'powerline/fonts' 
 Plugin 'tpope/vim-fugitive'
-Plugin 'klen/python-mode'
+
+" =============== NeoComplete ===============
+Plugin 'Shougo/neocomplcache.vim'
+
+" ============== Autopep8 =================
+Plugin 'tell-k/vim-autopep8'
+
+
+" Plugin 'klen/python-mode' " This will slow you down for a larger files. Use
+                            " after u know what to choose 
 
 
 " All of your Plugins must be added before the following line
@@ -43,7 +88,7 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 " let g:unite_source_grep_command = 'ack'
 " let g:unite_source_grep_default_opts = '--no-heading --no-color -k -H'
-" let g:unite_prompt='>>> '
+let g:unite_prompt='>>> '
 " let g:unite_source_grep_recursive_opt = ''
 " let g:unite_enable_split_vertically
 " To ignore plugin indent changes, instead use:
@@ -103,11 +148,12 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 "------------------------ pymode -----------------------
-let g:pymode_lint = 1
-let g:pymode_run = 1
-let g:pymode_run_bind = '<F5>'
-let g:pymode_lint_on_write = 1
-let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'pep8', 'mccabe']
+" let g:pymode_lint = 1
+" let g:pymode_run = 1
+" let g:pymode_run_bind = '<F5>'
+" let g:pymode_lint_on_write = 1
+" let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'pep8', 'mccabe']
+
 " ---------------------- General ------------------------
 set textwidth=79  " lines longer than 79 columns will be broken
 set shiftwidth=4  " operation >> indents 4 columns; << unindents 4 columns
