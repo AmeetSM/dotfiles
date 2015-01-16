@@ -4,8 +4,6 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 
-et nocompatible
-" set nowrap        " don't wrap lines
 set tabstop=4     " a tab is four spaces
 set expandtab
 set backspace=indent,eol,start
