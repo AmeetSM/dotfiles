@@ -80,6 +80,31 @@ Plugin 'tell-k/vim-autopep8'
 " Plugin 'klen/python-mode' " This will slow you down for a larger files. Use
                             " after u know what to choose 
 
+" ================= vim-indent-guides ==================
+Plugin 'nathanaelkane/vim-indent-guides'
+
+
+" ================= spark up ==================
+Plugin 'rstacruz/sparkup'
+
+
+" ================= Javascript plugins ==================
+Plugin 'jelera/vim-javascript-syntax' 
+Plugin 'vim-scripts/JavaScript-Indent'
+Plugin 'wookiehangover/jshint.vim' 
+Plugin 'Shutnik/jshint2.vim'
+"""Plugin 'othree/javascript-libraries-syntax'
+au FileType javascript call JavaScriptFold()
+let g:used_javascript_libs = 'angularjs, angularui, '
+autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 0
+autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 0
+autocmd BufReadPre *.js let b:javascript_lib_use_backbone = 0
+autocmd BufReadPre *.js let b:javascript_lib_use_prelude = 0
+autocmd BufReadPre *.js let b:javascript_lib_use_angularjs = 1
+set runtimepath+=~/.vim/bundle/jshint2.vim/
+let jshint2_save = 1
+let $JS_CMD='node'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -184,6 +209,10 @@ map <C-Up> :enew<CR>
 map <C-down> :bd<CR>
 map <C-S-Right> :sbn<CR>
 map <C-S-a> :ba<CR>
+
+
+"============== indent-guide =========================
+map <F9> :IndentGuidesToggle <CR>
 
 "=============== General ========================
 nnoremap <C-z> :q <CR>
