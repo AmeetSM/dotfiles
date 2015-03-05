@@ -213,6 +213,11 @@ map <C-S-a> :ba<CR>
 
 "============== indent-guide =========================
 map <F9> :IndentGuidesToggle <CR>
+let g:indent_guides_default_mapping = 1 
+let g:indent_guides_guide_size = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 
 "=============== General ========================
 nnoremap <C-z> :q <CR>
