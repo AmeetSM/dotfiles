@@ -221,4 +221,9 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 "=============== General ========================
 nnoremap <C-z> :q <CR>
+nnoremap <S-z> :q! <CR>
 nnoremap <C-x> :wq <CR>
+nnoremap <S-x> :wq! <CR>
+nnoremap <C-s> :w <CR>
+nnoremap <S-s> :w! <CR>
+
