@@ -185,6 +185,7 @@ set expandtab     " insert spaces when hitting TABs
 set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
 set shiftround    " round indent to multiple of 'shiftwidth'
 set autoindent    " align the new line indent with the previous line
+set clipboard^=unnamedplus  "copy the yanked lines to clip board -- ** need vim-gnome **
 
 
 
@@ -218,7 +219,6 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
-
 "=============== General ========================
 nnoremap <C-z> :q <CR>
 nnoremap <C-x> :wq <CR>
