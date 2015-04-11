@@ -122,8 +122,7 @@ export HISTSIZE=1000000
 
 # Git related
 alias gs='git status'
-alias gc='git clone'
-alias gcc='git commit'
+alias gc='git commit'
 alias ga='git add'
 alias gd='git diff'
 alias gb='git branch'
@@ -136,7 +135,9 @@ alias gr='git rebase'
 alias gri='git rebase --interactive'
 alias gcp='git cherry-pick'
 alias grm='git rm'
+alias gt='git tag'
 
+alias gcco='git clean -f && gco -- .'
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
 HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
