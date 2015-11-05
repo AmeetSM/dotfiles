@@ -31,9 +31,11 @@ set visualbell           " don't beep
 set noerrorbells         " don't beep
 set nobackup
 set noswapfile
+set cursorline
+set listchars=eol:$,trail:·,tab:»·,extends:>,precedes:<
+set list
 filetype plugin on
 syntax on
-
 
 " set the runtime path to include Vundle and initialize
 "
@@ -86,6 +88,10 @@ Plugin 'nathanaelkane/vim-indent-guides'
 
 " ================= spark up ==================
 Plugin 'rstacruz/sparkup'
+" ================= Markdown Higlighting ===============
+Plugin 'godlygeek/tabular'
+Plugin 'tpope/vim-markdown'
+Plugin 'suan/vim-instant-markdown'
 
 
 " ================= Javascript plugins ==================
@@ -227,3 +233,11 @@ nnoremap <S-x> :wq! <CR>
 nnoremap <C-s> :w <CR>
 nnoremap <S-s> :w! <CR>
 
+"============== MarkDown Highlighting =============
+let g:instant_markdown_autostart = 1
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+
+"============== Replace : with ; in normal mode ==========
+nnoremap ; :
+nnoremap : ;
