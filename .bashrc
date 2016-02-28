@@ -222,3 +222,5 @@ export HISTTIMEFORMAT="%d/%m/%y %T - "
 # vim alias
 alias vundleinstall='vim +PluginInstall +qall'
 
+# sync with root path -- sudo pip2.7 --version was not working
+alias sudo='sudo env PATH=$PATH'
