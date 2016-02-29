@@ -4,6 +4,18 @@
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
+# Added these lines for vim clipboard
+if [ -e /usr/bin/vimx ]; then 
+    alias vim='/usr/bin/vimx'; 
+fi
+
+add_git_branch(){
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+if [ -f /home/local/PALYAM/sameet/.git-prompt.sh ]; then
+    source /home/local/PALYAM/sameet/.git-prompt.sh
+    export PS1='`if [ $? = 0 ]; then echo "\[\033[01;32m\]✔"; else echo "\[\033[01;31m\]✘"; fi` \[\033[01;30m\]\u\[\033[01;34m\] \[\e[22m\]\w\[\e[33m\]$(add_git_branch) \[\033[01;30m\]>\[\033[00m\] '
+fi 
 
 
 # some more ls aliases
@@ -83,6 +95,8 @@ alias df='df -h -x tmpfs -x usbfs'
 alias psg='ps -ef | grep $1'
 alias h='history | grep $1'
 alias ..='cd ..'
+alias ....='cd ../..'
+alias grep='grep --ignore-case --color'
 
 # Coloring the manual (man command)
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -92,20 +106,6 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-
-#netinfo - shows network information for your system
-netinfo ()
-{
-echo "--------------- Network Information ---------------"
-/sbin/ifconfig | awk /'inet addr/ {print $2}'
-/sbin/ifconfig | awk /'Bcast/ {print $3}'
-/sbin/ifconfig | awk /'inet addr/ {print $4}'
-/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
-myip=`lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org:8245/ | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g' `
-echo "${myip}"
-echo "---------------------------------------------------"
-}
-
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -129,6 +129,8 @@ alias gb='git branch'
 alias gl='git log'
 alias gsb='git show-branch'
 alias gco='git checkout'
+alias gpo='git pull origin'
+alias gpa='git push ameet'
 alias gg='git grep'
 alias gk='gitk --all'
 alias gr='git rebase'
@@ -136,8 +138,14 @@ alias gri='git rebase --interactive'
 alias gcp='git cherry-pick'
 alias grm='git rm'
 alias gt='git tag'
-
 alias gcco='git clean -f && gco -- .'
+alias grv='git remote -v'
+git_reset_soft(){
+    git reset --soft HEAD~"$1"
+}
+alias grs=git_reset_soft
+alias ugrs='git reset HEAD@{1}'
+
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
 HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
@@ -165,15 +173,23 @@ mkcd() {
 
 # Run buildout
 alias rbo='./usr/bin/buildout -c linux_dev.cfg'
+alias dco='./bin/develop co '
+alias rz='./bin/zope_c1 fg'
 
 
 # Start Jiva instance 
-JIVA561_HOME=/home/local/PALYAM/sameet/workspace/Jiva_5.6.1_sep_24_test/jiva_buildout
-# JIVA561_HOME=/home/local/PALYAM/sameet/workspace/Jiva_5.6.1_sep_18/jiva_buildout
-# JIVA561_HOME=/home/local/PALYAM/sameet/workspace/Jiva_56_Sentinel_sep_4/jiva_buildout
-janana561() {
-    cd $JIVA561_HOME ;
-    echo "PWD is : $JIVA561_HOME"
+create_instance() {
+    git clone git@github.com:zeomega/jiva_buildout.git;
+    echo "##############   Executed : git clone git@github.com:zeomega/jiva_buildout.git ##################"
+    cd jiva_buildout 
+    echo "##############   Executed : cd jiva_buildout ##################"
+    ./installpy27.sh -s
+    echo "##############   Executed : ./installpy27.sh -s ################" 
+    ./usr/bin/buildout -c linux_dev.cfg
+    echo "##############   Executed : ./usr/bin/buildout -c linux_dev.cfg  ################" 
+}
+
+zope_start() {
     source ./bin/mssql_odbc.sh ;
     echo "##############   Executed : ./bin/mssql_odbc.sh  ##################"
     ./bin/zeo_svc start ;
@@ -183,16 +199,14 @@ janana561() {
     ./bin/mongodb_svc start ;
     echo "##############   Executed : ./bin/mongodb_svc start   ###############" 
     ./bin/zope_c1 fg ;
-        
-    }
-
+}
 
 # Kill the processes related to Jiva instance
 grimreaper() {
     pgrep -l "python" ;
     echo "Killing all python processes ..."
     pkill "python" ;
-    
+
     pgrep -l "mongo" ;
     echo "Killing all mongodb processes ..."
     pkill "mongo" ;
@@ -201,16 +215,14 @@ grimreaper() {
     echo "Killing all memcache processes ..."
     pkill "memca" ;
 
-    }
-
+}
 
 # Unlock the mongodb
 mongounlock() {
     rm -rf /home/local/PALYAM/sameet/workspace/Jiva_5.6.1_sep_24_test/jiva_buildout/var/mongodb/data/* ;
     echo "Mongo Unlocked ... " 
 
-    }
-
+}
 
 # User specific aliases and functions
 alias db='rdesktop 192.168.11.4 -u sameet -d PALYAM -g "90%"'
@@ -224,3 +236,8 @@ alias vundleinstall='vim +PluginInstall +qall'
 
 # sync with root path -- sudo pip2.7 --version was not working
 alias sudo='sudo env PATH=$PATH'
+
+# settings for virtualenvwrapper
+export WORKON_HOME=$HOME/.virtual_machine
+export PROJECT_HOME=$HOME/virtal_workspace
+source /usr/local/bin/virtualenvwrapper.sh

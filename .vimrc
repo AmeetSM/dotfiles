@@ -32,10 +32,16 @@ set noerrorbells         " don't beep
 set nobackup
 set noswapfile
 set cursorline
-set listchars=eol:$,trail:·,tab:»·,extends:>,precedes:<
+set listchars=trail:·,tab:»·,extends:>,precedes:< ",eol:$
 set list
+set foldlevel=99 "unfold the floding by default
+set cc=120
+set modifiable "for window resize
+set relativenumber
 filetype plugin on
 syntax on
+
+let $JS_CMD='node'
 
 " set the runtime path to include Vundle and initialize
 "
@@ -53,11 +59,14 @@ Plugin 'gmarik/Vundle.vim'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 
+"================ Plugins for highlighting white space ================
+Plugin 'ntpeters/vim-better-whitespace'
 
 "================ Plugins for Unite.vim Start ================
 
+Plugin 'scrooloose/nerdtree'
 Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/vimproc.vim' "go to vimproc.vim and run /usr/bin/make -f make_unix.mak to compile it
 Plugin 'sgur/unite-everything'
 Plugin 'Shougo/neomru.vim'
 Plugin 'Shougo/tabpagebuffer.vim'
@@ -69,9 +78,24 @@ Plugin 'ujihisa/unite-colorscheme'
 "================ Plugins for vim-airline Start ================
 "
 Plugin 'bling/vim-airline'
-Plugin 'powerline/fonts' 
+Plugin 'ludovicchabant/vim-lawrencium'
+Plugin 'bling/vim-bufferline'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'mhinz/vim-signify'
+Plugin 'powerline/fonts'
 Plugin 'tpope/vim-fugitive'
+Plugin 'nvie/vim-flake8'
 
+"================ Plugins vim-multiple-cursors ================
+Plugin 'terryma/vim-multiple-cursors'
+"
+"" ================= vim-indent-guides ==================
+Plugin 'nathanaelkane/vim-indent-guides'
+
+" ================= gundo ==================
+" Installed directly git clone http://github.com/sjl/gundo.vim.git ~/.vim/bundle/gundo
+"
+"
 " =============== NeoComplete ===============
 Plugin 'Shougo/neocomplcache.vim'
 
@@ -80,10 +104,7 @@ Plugin 'tell-k/vim-autopep8'
 
 
 " Plugin 'klen/python-mode' " This will slow you down for a larger files. Use
-                            " after u know what to choose 
-
-" ================= vim-indent-guides ==================
-Plugin 'nathanaelkane/vim-indent-guides'
+                            " after u know what to choose
 
 
 " ================= spark up ==================
@@ -95,9 +116,9 @@ Plugin 'suan/vim-instant-markdown'
 
 
 " ================= Javascript plugins ==================
-Plugin 'jelera/vim-javascript-syntax' 
+Plugin 'jelera/vim-javascript-syntax'
 Plugin 'vim-scripts/JavaScript-Indent'
-Plugin 'wookiehangover/jshint.vim' 
+Plugin 'wookiehangover/jshint.vim'
 Plugin 'Shutnik/jshint2.vim'
 """Plugin 'othree/javascript-libraries-syntax'
 au FileType javascript call JavaScriptFold()
@@ -133,17 +154,22 @@ let g:unite_prompt='>>> '
 " Put your non-Plugin stuff after this line
 "
 " ------------------ vim airline settings ----------------
-let g:airline_section_b = '%{strftime("%c")}'
-let g:airline_section_y = 'BN: %{bufnr("%")}' 
-let g:airline_powerline_fonts = 1
+let g:airline#extensions#default#layout = [
+      \ [ 'a', 'b', 'c' ],
+      \ ['z', 'warning'],
+      \ ]
+
+let g:airline_section_warning = '%{strftime("%x-%I:%M%p")}'
+let g:airline_section_c = airline#section#create(['%f'])
+let g:airline_section_z = airline#section#create_right(['(%l/%c)%p%%'])
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 " unicode symbols
-let g:airline_left_sep = '»'
+"let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
+"let g:airline_right_sep = '«'
 let g:airline_right_sep = '◀ '
 let g:airline_symbols.linenr = '␊'
 let g:airline_symbols.linenr = '␤'
@@ -159,16 +185,14 @@ let g:airline_left_alt_sep = '▶'
 " powerline symbols
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
-
-
 let g:Powerline_symbols = 'fancy'
-set encoding=utf-8
-set t_Co=256
-set fillchars+=stl:\ ,stlnc:\
 let g:Powerline_mode_V="V·LINE"
 let g:Powerline_mode_cv="V·BLOCK"
 let g:Powerline_mode_S="S·LINE"
 let g:Powerline_mode_cs="S·BLOCK"
+set encoding=utf-8
+set t_Co=256
+set fillchars+=stl:\ ,stlnc:\
 set laststatus=2
 set hidden
 
@@ -184,16 +208,19 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'pep8', 'mccabe']
 
 " ---------------------- General ------------------------
-set textwidth=79  " lines longer than 79 columns will be broken
+set textwidth=120  " lines longer than 79 columns will be broken
 set shiftwidth=4  " operation >> indents 4 columns; << unindents 4 columns
 set tabstop=4     " a hard TAB displays as 4 columns
 set expandtab     " insert spaces when hitting TABs
 set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
 set shiftround    " round indent to multiple of 'shiftwidth'
 set autoindent    " align the new line indent with the previous line
-set clipboard^=unnamedplus  "copy the yanked lines to clip board -- ** need vim-gnome **
+set clipboard^=unnamedplus  "copy the yanked lines to clip board -- ** need vim-gnome(ubuntu) vim-X11(centos)
+                            "and add vimx in bashrc**
 
-
+"-----------------autopep8----------------------
+"
+let g:autopep8_max_line_length=119
 
 " Customs key mappings
 "================== unite ======================
@@ -220,7 +247,7 @@ map <C-S-a> :ba<CR>
 
 "============== indent-guide =========================
 map <F9> :IndentGuidesToggle <CR>
-let g:indent_guides_default_mapping = 1 
+let g:indent_guides_default_mapping = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
@@ -238,6 +265,29 @@ let g:instant_markdown_autostart = 1
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
-"============== Replace : with ; in normal mode ==========
-nnoremap ; :
-nnoremap : ;
+""============== Replace : with ; in normal mode ==========
+"nnoremap ; :
+"nnoremap : ;
+"================ Nerd Tree mappings ==============
+map <F8> :NERDTreeToggle <CR>
+
+"================ buffer movement mappings ==============
+nmap w<left>  :10wincmd <<cr>
+nmap w<right> :10wincmd ><cr>
+nmap w<up>    :10wincmd +<cr>
+nmap w<down>  :10wincmd -<cr>
+map <leader>a :wincmd H<cr>
+map <leader>w :wincmd K<cr>
+map <leader>d :wincmd L<cr>
+map <leader>s :wincmd J<cr>
+nmap <leader>= :wincmd =<cr>
+nmap <leader>q :-quit<cr>
+
+"======== Gundo mapping ============
+" nnoremap <F5> :GundoToggle<CR>   "not an editor command: GundoToggle
+"
+"======== Highlight white space  ============
+highlight ExtraWhitespace ctermbg=Red
+map <F12> :StripWhitespace<CR>
+
+highlight LineNr ctermfg=None guibg=#B94919
