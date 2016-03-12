@@ -97,6 +97,7 @@ alias h='history | grep $1'
 alias ..='cd ..'
 alias ....='cd ../..'
 alias grep='grep --ignore-case --color'
+alias jiva61='cd ~/workspace/ZeOmega/Jiva_61_Feb_29/jiva_buildout'
 
 # Coloring the manual (man command)
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -219,7 +220,7 @@ grimreaper() {
 
 # Unlock the mongodb
 mongounlock() {
-    rm -rf /home/local/PALYAM/sameet/workspace/Jiva_5.6.1_sep_24_test/jiva_buildout/var/mongodb/data/* ;
+    rm -rf var/mongodb/data/* ;
     echo "Mongo Unlocked ... " 
 
 }

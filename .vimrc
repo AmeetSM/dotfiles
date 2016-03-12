@@ -5,6 +5,7 @@ filetype off                  " required
 
 
 set tabstop=4     " a tab is four spaces
+set softtabstop=4
 set expandtab
 set backspace=indent,eol,start
                   " allow backspacing over everything in insert mode
@@ -34,8 +35,8 @@ set noswapfile
 set cursorline
 set listchars=trail:·,tab:»·,extends:>,precedes:< ",eol:$
 set list
-set foldlevel=99 "unfold the floding by default
-set cc=120
+set nofoldenable    " disable folding
+" set foldlevel=99 "unfold the floding by default
 set modifiable "for window resize
 set relativenumber
 filetype plugin on
@@ -58,6 +59,16 @@ Plugin 'gmarik/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
+"
+"=============== Frontend development Plugins =================
+Plugin 'burnettk/vim-angular'
+Plugin 'pangloss/vim-javascript'
+
+"=============== Nerdcommenter ================
+Plugin 'scrooloose/nerdcommenter'
+
+"================ Easymotion ===================
+Plugin  'easymotion/vim-easymotion'
 
 "================ Plugins for highlighting white space ================
 Plugin 'ntpeters/vim-better-whitespace'
@@ -98,10 +109,11 @@ Plugin 'nathanaelkane/vim-indent-guides'
 "
 " =============== NeoComplete ===============
 Plugin 'Shougo/neocomplcache.vim'
+Plugin 'Shougo/neosnippet'
+Plugin 'Shougo/neosnippet-snippets'
 
 " ============== Autopep8 =================
 Plugin 'tell-k/vim-autopep8'
-
 
 " Plugin 'klen/python-mode' " This will slow you down for a larger files. Use
                             " after u know what to choose
@@ -220,7 +232,7 @@ set clipboard^=unnamedplus  "copy the yanked lines to clip board -- ** need vim-
 
 "-----------------autopep8----------------------
 "
-let g:autopep8_max_line_length=119
+let g:autopep8_max_line_length=120
 
 " Customs key mappings
 "================== unite ======================
@@ -237,8 +249,8 @@ nnoremap <space>. :Unite neomru/file<CR>
 nnoremap <space>l :Unite line<CR>
 
 "============== Buffers =========================
-map <C-Left> :bn<CR>
-map <C-Right> :bp<CR>
+map <C-Left> :bp<CR>
+map <C-Right> :bn<CR>
 map <C-Up> :enew<CR>
 map <C-down> :bd<CR>
 map <C-S-Right> :sbn<CR>
@@ -257,7 +269,6 @@ nnoremap <C-z> :q <CR>
 nnoremap <S-z> :q! <CR>
 nnoremap <C-x> :wq <CR>
 nnoremap <S-x> :wq! <CR>
-nnoremap <C-s> :w <CR>
 nnoremap <S-s> :w! <CR>
 
 "============== MarkDown Highlighting =============
@@ -281,7 +292,7 @@ map <leader>w :wincmd K<cr>
 map <leader>d :wincmd L<cr>
 map <leader>s :wincmd J<cr>
 nmap <leader>= :wincmd =<cr>
-nmap <leader>q :-quit<cr>
+nmap <leader>q :quit<cr>
 
 "======== Gundo mapping ============
 " nnoremap <F5> :GundoToggle<CR>   "not an editor command: GundoToggle
@@ -291,3 +302,43 @@ highlight ExtraWhitespace ctermbg=Red
 map <F12> :StripWhitespace<CR>
 
 highlight LineNr ctermfg=None guibg=#B94919
+
+" ============= Neocomplacache and neo-snippet ===============
+" Enable snipMate compatibility feature.
+let g:neocomplcache_enable_at_startup = 1
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+
+"================ Easymotion ================
+map <Leader><Leader><Right> <Plug>(easymotion-lineforward)
+map <Leader><Leader><Up> <Plug>(easymotion-k)
+map <Leader><Leader><Down> <Plug>(easymotion-j)
+map <Leader><Leader><Left> <Plug>(easymotion-linebackward)
+map <Leader><Leader>w <Plug>(easymotion-bd-w)
+map <Leader><Leader>f <Plug>(easymotion-bd-f)
+
+"=============== Angularjs Mappings =============
+let g:angular_source_directory = '/home/local/PALYAM/sameet/workspace/ZeOmega/Jiva_61_Feb_29/jiva_buildout/src'
+let g:angular_filename_convention = 'camelcased'
+
+"============== Indent mappings ===============
+:nnoremap <leader>[ zfat
+map <Leader>] :set foldlevel=99<CR>
+
+" =============== Flake8 mappings =============
+let g:flake8_show_in_gutter=1  " show
+let g:flake8_show_in_file=1  " show
+let g:flake8_quickfix_height=2
+let g:PyFlakeOnWrite = 1
+let g:PyFlakeCheckers = 'pep8'
+autocmd BufWritePost *.py call Flake8()
+
+" ================== Highlight the colorcolumn ==============
+" hi ColorColumn ctermbg=Black
+" let &colorcolumn=join(range(120,999),",")
+
+" ================== Highlight Fold ==============
+hi Folded ctermbg=Black ctermfg=Green
+
