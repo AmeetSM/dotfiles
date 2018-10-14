@@ -63,6 +63,7 @@ Plugin 'gmarik/Vundle.vim'
 "=============== Frontend development Plugins =================
 Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mattn/emmet-vim'
 
 "=============== Nerdcommenter ================
 Plugin 'scrooloose/nerdcommenter'
@@ -133,7 +134,7 @@ Plugin 'vim-scripts/JavaScript-Indent'
 Plugin 'wookiehangover/jshint.vim'
 Plugin 'Shutnik/jshint2.vim'
 """Plugin 'othree/javascript-libraries-syntax'
-au FileType javascript call JavaScriptFold()
+"au FileType javascript call JavaScriptFold()
 let g:used_javascript_libs = 'angularjs, angularui, '
 autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 0
 autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 0
@@ -151,8 +152,10 @@ filetype plugin indent on    " required
 " let g:unite_source_grep_command = 'ack'
 " let g:unite_source_grep_default_opts = '--no-heading --no-color -k -H'
 let g:unite_prompt='>>> '
-" let g:unite_source_grep_recursive_opt = ''
-" let g:unite_enable_split_vertically
+let s:unite_ignores = ['./node_modules/', './coverage/']
+call unite#custom#source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+  \ 'ignore_globs', unite#get_all_sources('file_rec')['ignore_globs'] +
+  \ s:unite_ignores)" let g:unite_enable_split_vertically
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -255,6 +258,7 @@ map <C-Up> :enew<CR>
 map <C-down> :bd<CR>
 map <C-S-Right> :sbn<CR>
 map <C-S-a> :ba<CR>
+nnoremap <expr> b ":<C-u>b" . (v:count ? v:count : "#") . "<CR>"
 
 
 "============== indent-guide =========================
@@ -341,4 +345,5 @@ autocmd BufWritePost *.py call Flake8()
 
 " ================== Highlight Fold ==============
 hi Folded ctermbg=Black ctermfg=Green
+
 

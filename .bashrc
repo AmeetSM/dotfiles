@@ -1,27 +1,28 @@
-# .bashrc
+#.bashrc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 # Added these lines for vim clipboard
-if [ -e /usr/bin/vimx ]; then 
-    alias vim='/usr/bin/vimx'; 
+if [ -e /usr/bin/vimx ]; then
+    alias vim='/usr/bin/vimx';
 fi
 
 add_git_branch(){
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
-if [ -f /home/local/PALYAM/sameet/.git-prompt.sh ]; then
-    source /home/local/PALYAM/sameet/.git-prompt.sh
+if [ -f /home/sameet/.git-prompt.sh ]; then
+    source /home/sameet/.git-prompt.sh
     export PS1='`if [ $? = 0 ]; then echo "\[\033[01;32m\]✔"; else echo "\[\033[01;31m\]✘"; fi` \[\033[01;30m\]\u\[\033[01;34m\] \[\e[22m\]\w\[\e[33m\]$(add_git_branch) \[\033[01;30m\]>\[\033[00m\] '
-fi 
+fi
 
 
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias htmlhint='htmlhint --config ~/.htmlhintrc'
 
 
 # enable programmable completion features (you don't need to enable
@@ -98,6 +99,8 @@ alias ..='cd ..'
 alias ....='cd ../..'
 alias grep='grep --ignore-case --color'
 alias jiva61='cd ~/workspace/ZeOmega/Jiva_61_Feb_29/jiva_buildout'
+alias wd='cd ~/workspace/jiva_7_dev/jiva_buildout'
+alias wr='cd ~/workspace/jiva_7_int/jiva_buildout'
 
 # Coloring the manual (man command)
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -175,31 +178,35 @@ mkcd() {
 # Run buildout
 alias rbo='./usr/bin/buildout -c linux_dev.cfg'
 alias dco='./bin/develop co '
-alias rz='./bin/zope_c1 fg'
+# alias rz='./bin/zope_c1 fg'
+alias rz='./bin/zope_fixed_install fg'
 
 
-# Start Jiva instance 
+# Start Jiva instance
 create_instance() {
-    git clone git@github.com:zeomega/jiva_buildout.git;
+    git clone git@git.zeomega.com:zeomega/jiva_buildout.git;
     echo "##############   Executed : git clone git@github.com:zeomega/jiva_buildout.git ##################"
-    cd jiva_buildout 
+    cd jiva_buildout
+    git checkout $1
+    git branch
     echo "##############   Executed : cd jiva_buildout ##################"
     ./installpy27.sh -s
-    echo "##############   Executed : ./installpy27.sh -s ################" 
+    echo "##############   Executed : ./installpy27.sh -s ################"
     ./usr/bin/buildout -c linux_dev.cfg
-    echo "##############   Executed : ./usr/bin/buildout -c linux_dev.cfg  ################" 
+    echo "##############   Executed : ./usr/bin/buildout -c linux_dev.cfg  ################"
 }
 
 zope_start() {
     source ./bin/mssql_odbc.sh ;
     echo "##############   Executed : ./bin/mssql_odbc.sh  ##################"
     ./bin/zeo_svc start ;
-    echo "##############   Executed : ./bin/zeo_svc start  ################" 
+    echo "##############   Executed : ./bin/zeo_svc start  ################"
     ./bin/memcached_svc start ;
-    echo "##############   Executed : ./bin/memcached_svc start   ################" 
+    echo "##############   Executed : ./bin/memcached_svc start   ################"
     ./bin/mongodb_svc start ;
-    echo "##############   Executed : ./bin/mongodb_svc start   ###############" 
-    ./bin/zope_c1 fg ;
+    echo "##############   Executed : ./bin/mongodb_svc start   ###############"
+    echo "##############   Executing : ./bin/zope_fixed_install fg   ###############"
+    ./bin/zope_fixed_install fg ;
 }
 
 # Kill the processes related to Jiva instance
@@ -221,7 +228,7 @@ grimreaper() {
 # Unlock the mongodb
 mongounlock() {
     rm -rf var/mongodb/data/* ;
-    echo "Mongo Unlocked ... " 
+    echo "Mongo Unlocked ... "
 
 }
 
@@ -229,6 +236,7 @@ mongounlock() {
 alias db='rdesktop 192.168.11.4 -u sameet -d PALYAM -g "90%"'
 alias 11.4='rdesktop 192.168.11.4 -u sameet -d PALYAM -g "90%"'
 alias 4.4='rdesktop 192.168.4.4 -u sameet -d PALYAM -g "90%"'
+alias devsp='rdesktop 172.27.2.162 -u sameet -d PALYAM -g "100%"'
 
 export HISTTIMEFORMAT="%d/%m/%y %T - "
 
@@ -238,7 +246,29 @@ alias vundleinstall='vim +PluginInstall +qall'
 # sync with root path -- sudo pip2.7 --version was not working
 alias sudo='sudo env PATH=$PATH'
 
-# settings for virtualenvwrapper
-export WORKON_HOME=$HOME/.virtual_machine
-export PROJECT_HOME=$HOME/virtal_workspace
-source /usr/local/bin/virtualenvwrapper.sh
+# # settings for virtualenvwrapper
+# export WORKON_HOME=$HOME/.virtual_machine
+# export PROJECT_HOME=$HOME/virtal_workspace
+# source /usr/local/bin/virtualenvwrapper.sh
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# gnome-terminal --tab -e "bash -c 'ls';'pwd';bash" --tab -e "bash -c 'ls';'pwd';bash" --tab -e "bash -c 'ls';'pwd';bash"
+cmd=( gnome-terminal )
+tab="--tab"
+title="--title"
+foo=""
+cmd01="bash -c 'source bin/mssql_odbc.sh; ./bin/soa_listener';'pwd';bash"
+create_soa_listeners () {
+for ((i=1;i<="$1";i++)); do
+    echo "creating a soa_listener"
+    tab_name="$title=SOA-$i"
+    echo $tab_name
+    foo+=($tab -e "$cmd01")
+done
+gnome-terminal "${foo[@]}"
+}
